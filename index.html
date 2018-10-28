@@ -24,8 +24,9 @@
   }();
     
   console.log(QueryString);
-				  
-  window.location.replace('lightroom://com.palebluespeck.lr#?code=' + QueryString.code);
+  val lightroomUrl = 'lightroom://com.palebluespeck.lr#?code=' + QueryString.code;
+  console.log(lightroomUrl);
+  window.location.replace(lightroomUrl);
   </script>
 </head>
 <body>

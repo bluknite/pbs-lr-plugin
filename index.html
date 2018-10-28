@@ -15,7 +15,7 @@
   }
   .demo-card-wide.mdl-card {
     width: 640px;
-	min-height: 150px;
+	min-height: 50px;
     margin: auto
   }
   .demo-card-wide > .mdl-card__title {
@@ -56,11 +56,11 @@
         <h2 class="mdl-card__title-text">Pale Blue Speck : Google Photos Lightroom Plugin</h2>
       </div>
       <div class="mdl-card__supporting-text" id="results"></div>
-      <div class="mdl-card__actions mdl-card--border">
+      <!-- <div class="mdl-card__actions mdl-card--border">
         <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">
           Back to Lightroom
         </a>
-      </div>
+      </div> -->
     </div>
   </div>
   
@@ -90,6 +90,13 @@
     resultsDiv.appendChild(tempDiv);
   }
   
+  function appendUrl(value) {
+    var tempNode = document.createElement("a");
+	tempNode.setAttribute("href", value);
+	tempNode.textContent = value;
+    resultsDiv.appendChild(tempNode);
+  }
+  
   var QueryString = function () {
     var query_string = {};
     var query = window.location.search.substring(1);
@@ -116,6 +123,7 @@
   console.log(QueryString);
   var lightroomUrl = 'lightroom://com.palebluespeck.lr#?code=' + QueryString.code;
   console.log(lightroomUrl);
+  appendUrl(lightroomUrl);
 //   window.location.replace(lightroomUrl);
   </script>
 </body>

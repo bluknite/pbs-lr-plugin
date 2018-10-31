@@ -9,19 +9,30 @@
   body {
     background: #ECEFF1;
   }
-  .main-container {
+  
+  .pbs-container {
     width: 100%;
+  }
+  
+  #chip-container {
+    max-width: 875px;
+    width: 95%;
+    margin: auto;
+	text-align: center;
+  }
+  
+  .card-holder {
     padding-top: 25px;
   }
-  .demo-card-wide.mdl-card {
+  
+  .card-holder .mdl-card {
     max-width: 875px;
-	width: 95%;
-	min-height: 50px;
+    width: 95%;
+    min-height: 50px;
     margin: auto
   }
-  .demo-card-wide > .mdl-card__title {
+  .card-holder .mdl-card__title {
     color: #fff;
-    background: #0277BD;
   }
   .kv {
     font-size: 14px;
@@ -29,11 +40,134 @@
   }
   .material-icons.arrow {
     font-size: 14px;
-    color: #FB8C00;
     padding-left: 5px;
     padding-right: 5px;
-	vertical-align: middle;
+    vertical-align: middle;
   }
+  
+  .pbs-results {
+	  width: inherit;
+	  padding: 10px;
+	  margin: auto;
+  }
+  
+  .mdl-progress {
+	  width: 80%;
+	  margin: auto;
+  }
+  
+  .mdl-button {
+	  margin-right: 10px;
+  }
+  
+  .mdl-chip {
+	  margin-right: 10px;
+  }
+  
+  /* Light Blue Card */
+  .blueCard .mdl-card__title {
+    background: #0277BD; /* 800 */
+  }
+  .blueCard .mdl-card {
+    background: #E1F5FE; /* 50 */
+  }
+  .blueCard .mdl-button {
+    color: #fff;
+  	background-color: #0091EA; /* A700 */
+  }
+  .blueCard .material-icons.arrow {
+    color: #01579B; /* 900 */
+  }
+  .blueCard .progressbar.bar1 {
+	  background-color: #0288D1; /* 700 */
+  }
+  
+  /* Gray Card */
+  .grayCard .mdl-card__title {
+    background: #424242; /* 800 */
+  }
+  .grayCard .mdl-card {
+    background: #FAFAFA; /* 50 */
+  }
+  .grayCard .mdl-button {
+    color: #fff;
+  	background-color: #616161; /* A700 */
+  }
+  .grayCard .material-icons.arrow {
+    color: #212121; /* 900 */
+  }
+  .grayCard .progressbar.bar1 {
+	  background-color: #616161; /* 700 */
+  }
+  .grayChip {
+    color: #fff;
+    background-color: #424242;
+  }
+  
+  /* Green Card */
+  .greenCard .mdl-card__title {
+    background: #2E7D32;
+  }
+  .greenCard .mdl-card {
+    background: #F1F8E9;
+  }
+  .greenCard .mdl-button {
+  	background-color: #00C853;
+  }
+  .greenCard .material-icons.arrow {
+    color: #1B5E20;
+  }
+  .greenCard .progressbar.bar1 {
+	  background-color: #388E3C;
+  }
+  .greenChip {
+    color: #fff;
+    background-color: #2E7D32;
+  }
+  
+  /* Yellow Card */
+  .yellowCard .mdl-card__title {
+    background: #F9A825;
+  }
+  .yellowCard .mdl-card {
+    background: #FFFDE7;
+  }
+  .yellowCard .mdl-button {
+  	background-color: #FFD600;
+  }
+  .yellowCard .material-icons.arrow {
+    color: #F57F17;
+  }
+  .yellowCard .progressbar.bar1 {
+	  background-color: #FBC02D;
+  }
+  .yellowChip {
+    color: #fff;
+    background-color: #F9A825;
+  }
+  
+  /* Deep Orange Card */
+  .redCard .mdl-card__title {
+    background: #D84315;
+  }
+  .redCard .mdl-card {
+    background: #FBE9E7;
+  }
+  .redCard .mdl-button {
+    color: #fff;
+  	background-color: #DD2C00;
+  }
+  .redCard .material-icons.arrow {
+    color: #BF360C;
+  }
+  .redCard .progressbar.bar1 {
+	  background-color: #E64A19;
+  }
+  .redChip {
+    color: #fff;
+    background-color: #D84315;
+  }
+  
   /* Rules for sizing the icon. */
   .material-icons.md-14 { font-size: 14px; }
   .material-icons.md-18 { font-size: 18px; }
@@ -51,23 +185,197 @@
   </style>
 </head>
 <body>
-  <div class="main-container">
-    <div class="demo-card-wide mdl-card mdl-shadow--4dp" id="pbs-main-card">
-      <div class="mdl-card__title">
-        <h2 class="mdl-card__title-text">Pale Blue Speck : Google Photos Lightroom Plugin</h2>
-      </div>
-      <div class="mdl-card__supporting-text" id="pbs-results"></div>
-    </div>
+  <div class="pbs-container" style="text-align: center;">
+	  	<h3>Pale Blue Speck : Google Photos Lightroom Plugin</h3>
   </div>
+  <div class="pbs-container">
+  	<div id="chip-container"></div>
+  </div>
+  <div class="pbs-container" id="card-container"></div>
   
   <script type="text/javascript">
-  var resultsDiv = document.getElementById("pbs-results");
-  var mainCardDiv = document.getElementById("pbs-main-card");
+  var cardContainer = document.getElementById("card-container");
+  var chipContainer = document.getElementById("chip-container");
   
-  function createSpan(value) {
+  /*
+  
+  Maintain a list of card ids added to the view
+  
+  JS object representing a card.
+    Constructor: (title, color, id)
+      if a card with the specified id already exists: log error to console.
+      else constructs the card with an inderterminate progress bar
+  
+    Show: ()
+      constructs the node structure for the card if it does not already exist and adds it to the document.
+  
+    Hide: ()
+      removes the node structure for the card from the document.
+  
+    Add Content: (html nodes)
+      appends the specified nodes to the content list for this card
+      if the card is already displayed, hide and reshow the card
+  
+    Add Button: (button-text, button-function)
+      creates and adds a button with the specified text to this card. Sets the onclick listener to button-function
+  
+  */
+  var cardIds = [];
+  
+  // Indicates whether a card with the given id exists.
+  function existsCard(id) {
+    var index = cardIds.findIndex(function(cardId) { return cardId === id; });
+	return index != -1;
+  }
+  
+  
+  
+  function Card(title, color, id) {
+    if (existsCard(id)) {
+      console.log("!!! Card with id '" + id + "' is already in the view !!!");
+    } else {
+	  console.log("Creating new card with id '" + id + "'");
+      cardIds.push(id);
+	  this.title = title;
+	  this.color = color;
+	  this.id = id;
+	  this.contents = [];
+	  this.buttons = [];
+	  this.inProgress = true;
+	  chipContainer.appendChild(createChip(this.title, this.id + "-chip"));
+	  // this.updateChipColor();
+    }
+  }
+  
+  Card.prototype.endProgress = function() {
+	  this.inProgress = false;
+	  this.update();
+  }
+  
+  Card.prototype.mainDiv = function() { return document.getElementById(this.id); }
+  
+  Card.prototype.isVisible = function() { return this.mainDiv() != null; }
+  
+  Card.prototype.show = function() {
+	if (this.isVisible()) { this.remove(); }
+	console.log("Adding card to view");
+	var cardHolderDiv = createDivWithClassAndId("card-holder " + this.color + "Card", this.id);
+    cardContainer.appendChild(cardHolderDiv);
+	
+	var cardDiv = createDivWithClassAndId("mdl-card mdl-shadow--4dp", this.id + "-card");
+	cardHolderDiv.appendChild(cardDiv);
+	
+    var titleDiv = createDivWithClass("mdl-card__title");
+	var titleNode = document.createElement("h2");
+	titleNode.className = "mdl-card__title-text";
+	titleNode.textContent = this.title;
+	titleDiv.appendChild(titleNode);
+	cardDiv.appendChild(titleDiv);
+	
+	var contentsDiv = createDivWithClassAndId("mdl-card__supporting-text pbs-results", this.id + "-contents");
+	cardDiv.appendChild(contentsDiv);
+	
+	this.update();
+	this.updateChipColor();
+  }
+  
+  Card.prototype.remove = function() {
+    var cardDiv = document.getElementById(this.id);
+	if (cardDiv) {
+		console.log("Removing card from view");
+		cardDiv.parentNode.removeChild(cardDiv);
+	}
+  }
+  
+  Card.prototype.update = function() {
+	  if (this.isVisible()) {
+	  	//update card contents.
+		var contentsDiv = document.getElementById(this.id + "-contents");
+		//remove existing children
+		contentsDiv.childNodes.forEach(function(node) {
+			contentsDiv.removeChild(node);
+		});
+		if (this.inProgress) {
+		  //add progress bar
+		  var progressDiv = createDivWithClassAndId("mdl-progress mdl-js-progress mdl-progress__indeterminate", this.id + "-progress");
+	  	  componentHandler.upgradeElement(progressDiv);
+		  contentsDiv.appendChild(progressDiv);
+		}
+		
+	    if (this.contents.length > 0) {
+		  this.contents.forEach(function(node) {
+		    contentsDiv.appendChild(node);
+		  });
+		}
+		
+		
+		//update buttons
+		var buttonsDiv = document.getElementById(this.id + "-buttons");
+		if (buttonsDiv != null) {
+			// remove the buttons holder
+			buttonsDiv.parentNode.removeChild(buttonsDiv);
+		}
+		if (this.buttons.length > 0) {
+			buttonsDiv = createDivWithClassAndId("mdl-card__actions mdl-card--border", this.id + "-buttons");
+			document.getElementById(this.id + "-card").appendChild(buttonsDiv);
+			this.buttons.forEach(function(button) {
+			  buttonsDiv.appendChild(createButton(button.name, button.action));
+			})
+		}
+	  }
+	  // componentHandler.upgradeDom();
+  }
+  
+  Card.prototype.addContent = function(contentNode) {
+	  this.contents.push(contentNode);
+	  this.update();
+  }
+  
+  Card.prototype.addButton = function(name, f) {
+	  this.buttons.push({name: name, action: f});
+	  this.update();
+  }
+  
+  Card.prototype.setColor = function(color) {
+	  this.color = color;
+	  this.updateChipColor();
+	  if (this.isVisible()) {
+		var cardHolderDiv = document.getElementById(this.id);
+		cardHolderDiv.className = "card-holder " + this.color + "Card";
+	  }
+  }
+  
+  Card.prototype.updateChipColor = function() {
+	var chipNode = document.getElementById(this.id + "-chip");
+	chipNode.className = "mdl-chip " + this.color + "Chip";
+  }
+  
+  
+  
+  function createDivWithClass(className) {
+    var divNode = document.createElement("div");
+    divNode.className = className;
+    return divNode;
+  }
+  
+  function createDivWithClassAndId(className, id) {
+    var divNode = createDivWithClass(className);
+    divNode.id = id;
+    return divNode;
+  }
+  
+  function createSpanWithClass(className) {
+	  var spanNode = document.createElement("span");
+	  spanNode.className = className;
+	  return spanNode;
+  }
+  
+  function createKVSpan(value) {
     var spanNode = document.createElement("span");
     spanNode.className = "kv";
-    spanNode.textContent = value;
+	var iNode = document.createElement("i");
+    iNode.textContent = value;
+	spanNode.appendChild(iNode);
     return spanNode;
   }
   
@@ -78,37 +386,62 @@
     return arrowNode;
   }
   
-  function appendKeyValue(key, value) {
-    var tempDiv = document.createElement("div");
-    tempDiv.appendChild(createSpan(key));
+  function createKVPair(key, value) {
+	var tempDiv = document.createElement("div");
+    tempDiv.appendChild(createKVSpan(key));
     tempDiv.appendChild(createArrow());
-    tempDiv.appendChild(createSpan(value));
-    resultsDiv.appendChild(tempDiv);
+    tempDiv.appendChild(createKVSpan(value));
+	return tempDiv;
   }
   
-  function appendUrlButton(url) {
-    var tempNode = document.createElement("div");
-    tempNode.className = "mdl-card__actions mdl-card--border";
-    
+  function createButton(name, f) {
     var buttonNode = document.createElement("button");
-    buttonNode.className = "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent";
-    buttonNode.textContent = "Back to Lightroom";
-    buttonNode.addEventListener("click", function(){
-        console.log(url);
-        window.location.replace(url);
-    });
-    
-    tempNode.appendChild(buttonNode);
-    mainCardDiv.appendChild(tempNode);
+    buttonNode.className = "mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect";
+    buttonNode.textContent = name;
+    buttonNode.addEventListener("click", f);
+	componentHandler.upgradeElement(buttonNode);
+	return buttonNode;
   }
   
-  var QueryString = function () {
+  function createChip(name, id) {
+	var chipSpan = createSpanWithClass("mdl-chip");
+	chipSpan.id = id;
+	var textSpan = createSpanWithClass("mdl-chip__text");
+	textSpan.textContent = name;
+	chipSpan.appendChild(textSpan);
+	componentHandler.upgradeElement(chipSpan);
+	return chipSpan;
+  }
+  
+  function createSectionTitle(name) {
+	var divNode = document.createElement("div");
+	var bNode = document.createElement("b");
+	bNode.textContent = name;
+	divNode.appendChild(bNode);
+	return divNode;
+  }
+  
+  var authCard;
+  var accessTokenCard;
+  function createCards() {
+	  authCard = new Card("Authorization", "gray", "authorization-card");
+  	  authCard.show();
+	  
+	  accessTokenCard = new Card("Access Token", "gray", "access-token-card");
+	  
+	  parseQueryString();
+  }
+  
+  function parseQueryString() {
     var query_string = {};
     var query = window.location.search.substring(1);
     var vars = query.split("&");
+	if (vars.length > 0) {
+		authCard.addContent(createSectionTitle("Debug Info"));
+	}
     for (var i=0;i<vars.length;i++) {
       var pair = vars[i].split("=");
-      appendKeyValue(pair[0], decodeURIComponent(pair[1]));
+	  authCard.addContent(createKVPair(pair[0], decodeURIComponent(pair[1])));
         // If first entry with this name
       if (typeof query_string[pair[0]] === "undefined") {
         query_string[pair[0]] = decodeURIComponent(pair[1]);
@@ -120,11 +453,36 @@
       } else {
         query_string[pair[0]].push(decodeURIComponent(pair[1]));
       }
-    } 
-    return query_string;
-  }();
+    }
+	if (query_string.error != null) {
+		authCard.setColor("red");
+		authCard.addContent(createSectionTitle("Error Message"));
+		var messageDiv = document.createElement("div");
+		messageDiv.textContent = "You denied the plugin access to your photos. The plugin cannot work without this access. Please try again if this was accidental.";
+		authCard.addContent(messageDiv);
+	} else if (query_string.code != null) {
+		authCard.setColor("green");
+        var lightroomUrl = 'lightroom://com.palebluespeck.lr#?code=' + query_string.code;
+		authCard.addButton("Back to Lightroom", function() {
+			console.log(lightroomUrl);
+            // window.location.replace(lightroomUrl);
+		});
+		getAccessToken();
+	} else {
+		authCard.setColor("yellow");
+	}
+	authCard.endProgress();
+  }
+	  
+  function getAccessToken() {
+	accessTokenCard.show();
+
+	var messageDiv = document.createElement("div");
+	messageDiv.textContent = "This is a work in progress";
+	accessTokenCard.addContent(messageDiv);
+  }
   
-  var lightroomUrl = 'lightroom://com.palebluespeck.lr#?code=' + QueryString.code;
-  appendUrlButton(lightroomUrl);
+  
+  setTimeout(createCards, 100);
   </script>
 </body>

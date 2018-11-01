@@ -462,11 +462,6 @@
 		authCard.addContent(messageDiv);
 	} else if (query_string.code != null) {
 		authCard.setColor("green");
-        var lightroomUrl = 'lightroom://com.palebluespeck.lr#?code=' + query_string.code;
-		authCard.addButton("Back to Lightroom", function() {
-			console.log(lightroomUrl);
-            // window.location.replace(lightroomUrl);
-		});
 		getAccessToken(query_string.code);
 	} else {
 		authCard.setColor("yellow");
@@ -510,8 +505,12 @@
 		accessTokenCard.addContent(createKVPair("refresh_token", json.refresh_token));
 		accessTokenCard.addContent(createKVPair("expires_in", json.expires_in));
 		accessTokenCard.addContent(createKVPair("token_type", json.token_type));
-		// accessTokenCard.addContent(createMessageDiv(this.responseText));
-	    // document.getElementById("demo").innerHTML = this.responseText;
+		
+        var lightroomUrl = 'lightroom://com.palebluespeck.lr#?access_token=' + json.access_token + "&refresh_token=" + json.refresh_token;
+		accessTokenCard.addButton("Back to Lightroom", function() {
+			console.log(lightroomUrl);
+            window.location.replace(lightroomUrl);
+		});
 	  } else {
 		accessTokenCard.addContent(createKVPair("Status", this.status));
 		accessTokenCard.addContent(createKVPair("Response", this.responseText));

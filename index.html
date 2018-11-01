@@ -519,7 +519,7 @@
 			
 			if (this.status == 200) {
 		        var lightroomUrl = 'lightroom://com.palebluespeck.lr#?access_token=' + json.access_token + "&refresh_token=" + json.refresh_token;
-				accessTokenCard.addButton("Back to Lightroom", function() {
+				accessTokenCard.addButton("Authorize Lightroom", function() {
 					console.log(lightroomUrl);
 		            window.location.replace(lightroomUrl);
 				});

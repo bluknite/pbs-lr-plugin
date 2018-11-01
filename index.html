@@ -467,19 +467,56 @@
 			console.log(lightroomUrl);
             // window.location.replace(lightroomUrl);
 		});
-		getAccessToken();
+		getAccessToken(query_string.code);
 	} else {
 		authCard.setColor("yellow");
 	}
 	authCard.endProgress();
   }
-	  
-  function getAccessToken() {
-	accessTokenCard.show();
-
+  
+  function createMessageDiv(message) {
 	var messageDiv = document.createElement("div");
-	messageDiv.textContent = "This is a work in progress";
-	accessTokenCard.addContent(messageDiv);
+	messageDiv.textContent = message;
+	return messageDiv;
+  }
+	  
+  function getAccessToken(code) {
+	accessTokenCard.show();
+	
+	var codeParam = "code=" + encodeURIComponent(code);
+	var clientIdParam = "client_id=" + encodeURIComponent("318590923676-o8mq1u2n5g0fmtadfkkqujml1np1l73v.apps.googleusercontent.com");
+	var clientSecretParam = "client_secret=" + encodeURIComponent("C5qVzOofJbhhVyikStR1gxXJ");
+	var redirectUriParam = "redirect_uri=" + encodeURIComponent("https://bluknite.github.io/pbs-lr-plugin");
+	var grantTypeParam = "grant_type=" + encodeURIComponent("authorization_code");
+	
+	var xhrPayload = codeParam + "&" + clientIdParam + "&" + clientSecretParam + "&" + redirectUriParam + "&" + grantTypeParam;
+
+	accessTokenCard.addContent(createSectionTitle("Debug Info"));
+	accessTokenCard.addContent(createKVPair("code", codeParam));
+	accessTokenCard.addContent(createKVPair("client id", clientIdParam));
+	accessTokenCard.addContent(createKVPair("client secret", clientSecretParam));
+	accessTokenCard.addContent(createKVPair("redirect uri", redirectUriParam));
+	accessTokenCard.addContent(createKVPair("grant type", grantTypeParam));
+	accessTokenCard.addContent(createKVPair("payload", xhrPayload));
+	
+	accessTokenCard.addContent(createSectionTitle("Messages"));
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+	  if (this.readyState == 4 && this.status == 200) {
+		accessTokenCard.addContent(createMessageDiv("XHR complete"));
+		accessTokenCard.addContent(createMessageDiv(this.responseText));
+	    // document.getElementById("demo").innerHTML = this.responseText;
+	  } else {
+		accessTokenCard.addContent(createKVPair("Status", this.status));
+		accessTokenCard.addContent(createKVPair("Response", this.responseText));
+	  }
+	};
+	xhttp.open("POST", "https://www.googleapis.com/oauth2/v4/token", true);
+	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	accessTokenCard.addContent(createMessageDiv("Sending XHR"));
+	xhttp.send(xhrPayload);
+
+	// accessTokenCard.addContent(createMessageDiv("This is a work in progress"));
   }
   
   

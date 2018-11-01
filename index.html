@@ -187,7 +187,7 @@
 <body>
   <div class="pbs-container" style="text-align: center;">
 	  	<h3>Pale Blue Speck : Google Photos Lightroom Plugin</h3>
-	  	<i>v0.0.001</i>
+	  	<i>v0.0.002</i>
   </div>
   <div class="pbs-container">
   	<div id="chip-container"></div>
@@ -463,6 +463,11 @@
 		authCard.addContent(messageDiv);
 	} else if (query_string.code != null) {
 		authCard.setColor("green");
+		authCard.addButton("Goto intermediate URL", function() {
+			var tempUrl = "lightroom://com.palebluespeck.lr#?code=" + code;
+			console.log("Temp URL :\n" + tempUrl);
+		    window.location.replace(lightroomUrl);
+		})
 		getAccessToken(query_string.code);
 	} else {
 		authCard.setColor("yellow");
@@ -519,9 +524,9 @@
 			}
 			
 			if (this.status == 200) {
-		        var lightroomUrl = 'lightroom://com.palebluespeck.lr?access_token=' + json.access_token + "&refresh_token=" + json.refresh_token;
+		        var lightroomUrl = 'lightroom://com.palebluespeck.lr#?access_token=' + json.access_token + "&refresh_token=" + json.refresh_token;
 				accessTokenCard.addButton("Authorize Lightroom", function() {
-					console.log(lightroomUrl);
+					console.log("Lightroom URL :\n" + lightroomUrl);
 		            window.location.replace(lightroomUrl);
 				});
 				accessTokenCard.setColor("green");

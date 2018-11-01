@@ -504,7 +504,13 @@
 	xhttp.onreadystatechange = function() {
 	  if (this.readyState == 4 && this.status == 200) {
 		accessTokenCard.addContent(createMessageDiv("XHR complete"));
-		accessTokenCard.addContent(createMessageDiv(this.responseText));
+		var json = JSON.parse(this.responseText);
+		accessTokenCard.addContent(createKVPair("access_token", json.access_token));
+		accessTokenCard.addContent(createKVPair("id_token", json.id_token));
+		accessTokenCard.addContent(createKVPair("refresh_token", json.refresh_token));
+		accessTokenCard.addContent(createKVPair("expires_in", json.expires_in));
+		accessTokenCard.addContent(createKVPair("token_type", json.token_type));
+		// accessTokenCard.addContent(createMessageDiv(this.responseText));
 	    // document.getElementById("demo").innerHTML = this.responseText;
 	  } else {
 		accessTokenCard.addContent(createKVPair("Status", this.status));

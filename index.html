@@ -187,7 +187,7 @@
 <body>
   <div class="pbs-container" style="text-align: center;">
 	  	<h3>Pale Blue Speck : Google Photos Lightroom Plugin</h3>
-	  	<i>v0.0.004</i>
+	  	<i>v0.0.005</i>
   </div>
   <div class="pbs-container">
   	<div id="chip-container"></div>
@@ -463,11 +463,6 @@
 		authCard.addContent(messageDiv);
 	} else if (query_string.code != null) {
 		authCard.setColor("green");
-		authCard.addButton("Goto intermediate URL", function() {
-			var tempUrl = "lightroom://com.palebluespeck.lr#?code=" + query_string.code;
-			console.log("Temp URL :\n" + tempUrl);
-		    window.location.replace(tempUrl);
-		})
 		getAccessToken(query_string.code);
 	} else {
 		authCard.setColor("yellow");

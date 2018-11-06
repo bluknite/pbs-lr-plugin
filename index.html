@@ -195,9 +195,9 @@
 			<i class="material-icons">photo</i>
 			<i class="material-icons">cloud_upload</i>
 		</div>
-	  	<i>v0.0.006</i>
+	  	<i>v0.0.008</i>
   </div>
-  <div class="pbs-container">
+  <div class="pbs-container" style="padding-top:25px;">
   	<div id="chip-container"></div>
   </div>
   <div class="pbs-container" id="card-container"></div>
@@ -541,7 +541,7 @@
 		    accessTokenCard.endProgress();
 		}
 	};
-	xhttp.open("POST", "https://www.googleapis.com/oauth2/v4/token", true);
+	xhttp.open("POST", "https://www.googleapis.com/oauth2/v4/token?access_type=offline", true);
 	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	accessTokenCard.addContent(createMessageDiv("Sending XHR"));
 	xhttp.send(xhrPayload);

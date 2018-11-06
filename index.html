@@ -195,7 +195,7 @@
 			<i class="material-icons">photo</i>
 			<i class="material-icons">cloud_upload</i>
 		</div>
-	  	<i>v0.0.008</i>
+	  	<i>v0.0.009</i>
   </div>
   <div class="pbs-container" style="padding-top:25px;">
   	<div id="chip-container"></div>
@@ -492,8 +492,10 @@
 	var clientSecretParam = "client_secret=" + encodeURIComponent("C5qVzOofJbhhVyikStR1gxXJ");
 	var redirectUriParam = "redirect_uri=" + encodeURIComponent("https://bluknite.github.io/pbs-lr-plugin");
 	var grantTypeParam = "grant_type=" + encodeURIComponent("authorization_code");
+	var accessTypeParam = "access_type" + encodeURIComponent("offline");
+	//access_type=offline&approval_prompt=force
 	
-	var xhrPayload = codeParam + "&" + clientIdParam + "&" + clientSecretParam + "&" + redirectUriParam + "&" + grantTypeParam;
+	var xhrPayload = codeParam + "&" + clientIdParam + "&" + clientSecretParam + "&" + redirectUriParam + "&" + grantTypeParam + accessTypeParam;
 
 	accessTokenCard.addContent(createSectionTitle("Debug Info"));
 	accessTokenCard.addContent(createKVPair("code", codeParam));
@@ -541,7 +543,7 @@
 		    accessTokenCard.endProgress();
 		}
 	};
-	xhttp.open("POST", "https://www.googleapis.com/oauth2/v4/token?access_type=offline", true);
+	xhttp.open("POST", "https://www.googleapis.com/oauth2/v4/token", true);
 	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	accessTokenCard.addContent(createMessageDiv("Sending XHR"));
 	xhttp.send(xhrPayload);

@@ -195,7 +195,7 @@
 			<i class="material-icons">photo</i>
 			<i class="material-icons">cloud_upload</i>
 		</div>
-	  	<i>v0.0.009</i>
+	  	<i>v0.0.010</i>
   </div>
   <div class="pbs-container" style="padding-top:25px;">
   	<div id="chip-container"></div>
@@ -487,22 +487,22 @@
   function getAccessToken(code) {
 	accessTokenCard.show();
 	
-	var codeParam = "code=" + encodeURIComponent(code);
-	var clientIdParam = "client_id=" + encodeURIComponent("318590923676-o8mq1u2n5g0fmtadfkkqujml1np1l73v.apps.googleusercontent.com");
-	var clientSecretParam = "client_secret=" + encodeURIComponent("C5qVzOofJbhhVyikStR1gxXJ");
-	var redirectUriParam = "redirect_uri=" + encodeURIComponent("https://bluknite.github.io/pbs-lr-plugin");
-	var grantTypeParam = "grant_type=" + encodeURIComponent("authorization_code");
-	var accessTypeParam = "access_type" + encodeURIComponent("offline");
+	var xhrParams = [
+		"code=" + encodeURIComponent(code),
+		"client_id=" + encodeURIComponent("318590923676-o8mq1u2n5g0fmtadfkkqujml1np1l73v.apps.googleusercontent.com"),
+		"client_secret=" + encodeURIComponent("C5qVzOofJbhhVyikStR1gxXJ"),
+		"redirect_uri=" + encodeURIComponent("https://bluknite.github.io/pbs-lr-plugin"),
+		"grant_type=" + encodeURIComponent("authorization_code"),
+		"access_type=" + encodeURIComponent("offline")
+	]
 	//access_type=offline&approval_prompt=force
 	
-	var xhrPayload = codeParam + "&" + clientIdParam + "&" + clientSecretParam + "&" + redirectUriParam + "&" + grantTypeParam + accessTypeParam;
+	var xhrPayload = xhrParams.join("&");
 
 	accessTokenCard.addContent(createSectionTitle("Debug Info"));
-	accessTokenCard.addContent(createKVPair("code", codeParam));
-	accessTokenCard.addContent(createKVPair("client id", clientIdParam));
-	accessTokenCard.addContent(createKVPair("client secret", clientSecretParam));
-	accessTokenCard.addContent(createKVPair("redirect uri", redirectUriParam));
-	accessTokenCard.addContent(createKVPair("grant type", grantTypeParam));
+	xhrParams.forEach(function(param) {
+		accessTokenCard.addContent(createKVPair("", param));
+	})
 	accessTokenCard.addContent(createKVPair("payload", xhrPayload));
 	
 	accessTokenCard.addContent(createSectionTitle("Messages"));
